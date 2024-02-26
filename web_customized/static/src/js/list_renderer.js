@@ -24,15 +24,17 @@ patch(ListRenderer.prototype, {
                 Object.keys(items).forEach(function (key) {
                     if (items[key].groupId === groupId && items[key].custom) {
                         const fieldInfo = self.fields[items[key].field];
-                        if (['selection', 'boolean'].includes(fieldInfo.type)) {
-                            self.searchFilters[fieldInfo.name] = {
-                                value: 'all'
-                            };
-                        } else if (['date', 'datetime'].includes(fieldInfo.type)) {
-                            self.searchFilters[fieldInfo.name] = [];
-                        } else {
-                            self.searchFilters[fieldInfo.name] = self.searchFilters[fieldInfo.name]
-                                .filter(item => item.groupId !== groupId);
+						if (fieldInfo) {
+                            if (['selection', 'boolean'].includes(fieldInfo.type)) {
+                                self.searchFilters[fieldInfo.name] = {
+                                    value: 'all'
+                                };
+                            } else if (['date', 'datetime'].includes(fieldInfo.type)) {
+                                self.searchFilters[fieldInfo.name] = [];
+                            } else {
+                                self.searchFilters[fieldInfo.name] = self.searchFilters[fieldInfo.name]
+                                    .filter(item => item.groupId !== groupId);
+                            }
                         }
                     }
                 });
