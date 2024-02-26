@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-inherit="web.ListRenderer" t-inherit-mode="extension">
+        <xpath expr="//table/thead" position="inside">
+            <t t-if="!isX2Many">
+                <tr>
+                    <th t-if="hasSelectors"
+                        class="o_list_record_selector o_list_controller align-middle pe-1 cursor-pointer" tabindex="-1">
+                    </th>
+                    <th t-foreach="state.columns" t-as="column" t-key="column.id" class="o_column_search">
+                        <t t-if="column.type === 'field' and fields[column.name].store">
+                            <div class="list_search_box d-flex gap-1 flex-wrap flex-grow-1">
+                                <t t-if="fields[column.name].type === 'selection'">
+                                    <select class="o_input list_search_input"
+                                            t-on-change="(ev) => this._onChangeSelect(ev, fields[column.name])">
+                                        <option value="all" t-esc="all"
+                                                t-att-selected="searchFilters[column.name].value === 'all'"/>
+                                        <option t-foreach="fields[column.name].selection" t-as="selection"
+                                                t-key="selection[0]" t-att-value="selection[0]" t-esc="selection[1]"
+                                                t-att-selected="searchFilters[column.name].value === selection[0]">
+                                        </option>
+                                    </select>
+                                </t>
+                                <t t-elif="fields[column.name].type === 'boolean'">
+                                    <select class="o_input list_search_input" t-att-class="'select_' + column.name"
+                                            t-on-change="(ev) => this._onChangeBoolean(ev, fields[column.name])">
+                                        <option value="all" t-esc="all"
+                                                t-att-selected="searchFilters[column.name].value === 'all'"/>
+                                        <option value="true"
+                                                t-att-selected="searchFilters[column.name].value === 'true'"
+                                                t-esc="getTranslation(true)"/>
+                                        <option value="false"
+                                                t-att-selected="searchFilters[column.name].value === 'false'"
+                                                t-esc="getTranslation(false)"/>
+                                    </select>
+                                </t>
+                                <t t-elif="fields[column.name].type === 'one2many'">
+                                    <div/>
+                                </t>
+                                <t t-elif="['datetime', 'date'].includes(fields[column.name].type)">
+                                    <div t-if="searchFilters[column.name].value" class="filter_box o_date_filter_box"
+                                         t-att-data-tooltip="searchFilters[column.name].title">
+                                        <span t-esc="searchFilters[column.name].title"/>
+                                        <button class="oi oi-close btn delete_filter"
+                                                t-att-group_id="searchFilters[column.name].groupId"
+                                                t-on-click="(ev)=>this._deleteFilter(ev)"/>
+                                    </div>
+                                    <DateTimeRange fieldInfo="fields[column.name]" type="fields[column.name].type"
+                                                   onApply="onDateTimeApply.bind(this)"/>
+                                </t>
+                                <t t-else="">
+                                    <t t-foreach="searchFilters[column.name]" t-as="filter" t-key="filter.groupId">
+                                        <div class="filter_box">
+                                            <t t-esc="filter.value"/>
+                                            <button class="oi oi-close btn delete_filter"
+                                                    t-on-click="(ev)=>this._deleteFilter(ev)"
+                                                    t-att-group_id="filter.groupId"/>
+                                        </div>
+                                    </t>
+                                    <input t-att-data-field="column.name" class="o_input list_search_input w-auto"
+                                           t-on-keydown="(ev) => this._onInputKeydown(ev, fields[column.name])"
+                                           t-att-type="['integer', 'float', 'monetary'].includes(fields[column.name].type)?'number':'text'"
+                                           autocomplete="off"/>
+                                </t>
+                            </div>
+                        </t>
+                    </th>
+                    <th t-if="props.onOpenFormView" class="o_list_open_form_view"/>
+                    <th t-if="displayOptionalFields or activeActions.onDelete"
+                        class="o_list_controller o_list_actions_header position-sticky end-0"/>
+                </tr>
+            </t>
+        </xpath>
+        <xpath expr="//div/table" position="after">
+            <div t-if="isX2Many" class="o_x2many_float_scroll_box" t-ref="scroll-box">
+                <div class="o_x2many_float_scroll" t-ref="scroll"/>
+            </div>
+            <div t-if="isX2Many" class="o_x2many_float_header_box" t-ref="header-box"/>
+        </xpath>
+    </t>
+
+    <t t-name="DateTimeRange">
+        <input
+            type="text"
+            t-ref="start-date"
+            class="o_datetime_input o_input cursor-pointer list_search_input w-auto"
+            autocomplete="off"
+        />
+    </t>
+
+</templates>

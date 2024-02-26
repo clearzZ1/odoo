@@ -1,0 +1,86 @@
+.o_list_table {
+
+  tbody {
+    td {
+      border: 1px solid #dee2e6;
+    }
+  }
+
+  thead {
+    th {
+      outline: 1px solid #dee2e6;
+    }
+  }
+
+  .o_column_search {
+
+  }
+
+  .list_search_box {
+
+    .list_search_input {
+      min-width: 20px;
+      flex: 1;
+    }
+
+    .filter_box {
+      display: flex;
+      flex-wrap: nowrap;
+      padding-left: 5px;
+      border: 2px solid black;
+      border-radius: 50px;
+
+      .delete_filter {
+        padding-top: 0;
+        padding-left: 2px;
+        padding-right: 5px;
+      }
+
+    }
+
+    .o_date_filter_box {
+      overflow: hidden;
+      flex: 10;
+      cursor: pointer;
+      max-width: 100px;
+
+      span {
+        width: 70%;
+        display: table-cell;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-left: 3px;
+      }
+
+    }
+  }
+}
+
+.o_list_renderer .o_list_table th {
+  position: inherit;
+}
+
+.o_field_x2many_list {
+  th {
+    border: 1px solid #dee2e6;
+  }
+}
+
+.active {
+  .o_x2many_float_scroll_box {
+    display: block !important;;
+  }
+}
+
+.o_x2many_float_scroll_box {
+  height: auto;
+  display: none;
+  position: fixed;
+  bottom: 0;
+  overflow-x: auto;
+
+  .o_x2many_float_scroll {
+    height: 5px;
+  }
+}

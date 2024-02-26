@@ -1,0 +1,21 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* web_customized
+# 
+# Translators:
+# clearzZ <clearzz1@proton.me>, 2024
+#
+
+#. module: web_customized
+#. odoo-javascript
+#: code:web_customized/static/src/js/list_renderer.js:0
+#, python-format
+msgid "true"
+msgstr "为真"
+
+#. module: web_customized
+#. odoo-javascript
+#: code:web_customized/static/src/js/list_renderer.js:1
+#, python-format
+msgid "false"
+msgstr "为假"
