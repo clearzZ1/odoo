@@ -1,10 +1,10 @@
 /** @odoo-module **/
 
-import {ListRenderer} from "@web/views/list/list_renderer";
-import {patch} from "@web/core/utils/patch";
-import {getActiveHotkey} from "@web/core/hotkeys/hotkey_service";
+import { ListRenderer } from "@web/views/list/list_renderer";
+import { patch } from "@web/core/utils/patch";
+import { getActiveHotkey } from "@web/core/hotkeys/hotkey_service";
 import { _t } from "@web/core/l10n/translation";
-import {DateTimeRange} from "./datetime_range"
+import { DateTimeRange } from "./datetime_range"
 
 import {
     useState,
@@ -24,7 +24,7 @@ patch(ListRenderer.prototype, {
                 Object.keys(items).forEach(function (key) {
                     if (items[key].groupId === groupId && items[key].custom) {
                         const fieldInfo = self.fields[items[key].field];
-						if (fieldInfo) {
+                        if (fieldInfo) {
                             if (['selection', 'boolean'].includes(fieldInfo.type)) {
                                 self.searchFilters[fieldInfo.name] = {
                                     value: 'all'
@@ -156,22 +156,24 @@ patch(ListRenderer.prototype, {
             const searchItem = searchModel.searchItems[query.searchItemId];
             if (searchItem.custom) {
                 const fieldInfo = self.fields[searchItem.field];
-                if (['selection', 'boolean'].includes(fieldInfo.type)) {
-                    self.searchFilters[fieldInfo.name] = {
-                        groupId: searchItem.groupId,
-                        value: searchItem.domain[0][2].toString()
+                if (fieldInfo) {
+                    if (['selection', 'boolean'].includes(fieldInfo.type)) {
+                        self.searchFilters[fieldInfo.name] = {
+                            groupId: searchItem.groupId,
+                            value: searchItem.domain[0][2].toString()
+                        }
+                    } else if (['date', 'datetime'].includes(fieldInfo.type)) {
+                        self.searchFilters[fieldInfo.name] = {
+                            groupId: searchItem.groupId,
+                            title: searchItem.title,
+                            value: searchItem.title
+                        }
+                    } else {
+                        self.searchFilters[fieldInfo.name].push({
+                            groupId: searchItem.groupId,
+                            value: searchItem.domain[0][2]
+                        })
                     }
-                } else if (['date', 'datetime'].includes(fieldInfo.type)) {
-                    self.searchFilters[fieldInfo.name] = {
-                        groupId: searchItem.groupId,
-                        title: searchItem.title,
-                        value: searchItem.title
-                    }
-                } else {
-                    self.searchFilters[fieldInfo.name].push({
-                        groupId: searchItem.groupId,
-                        value: searchItem.domain[0][2]
-                    })
                 }
             }
         })
@@ -280,7 +282,7 @@ patch(ListRenderer.prototype, {
         }
     },
 
-    getTranslation(value){
+    getTranslation(value) {
         return _t(value)
     },
 
