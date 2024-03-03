@@ -3,7 +3,12 @@
 import {useDateTimePicker} from "@web/core/datetime/datetime_hook";
 import {Component} from "@odoo/owl";
 
-const {DateTime, Info} = luxon;
+import {
+    formatDate,
+    formatDateTime,
+    serializeDate,
+    serializeDateTime,
+} from "@web/core/l10n/dates";
 
 export class DateTimeRange extends Component {
     setup() {
@@ -20,15 +25,23 @@ export class DateTimeRange extends Component {
                 return getPickerProps();
             },
             onApply: (timeValue) => {
-                if(!timeValue.filter(v=>{return !!v}).length)return;
+                if (!timeValue.filter(v => {
+                    return !!v
+                }).length) return;
                 this.props.onApply(this.props.fieldInfo, {
                     timeValue: timeValue,
                     formatValue: this.props.type === 'date'
                         ? timeValue.map(value => {
-                            return value.toFormat('yyyy-MM-dd');
+                            return [
+                                serializeDate(value),
+                                formatDate(value)
+                            ];
                         })
                         : timeValue.map(value => {
-                            return value.toFormat('yyyy-MM-dd hh:mm:ss');
+                            return [
+                                serializeDateTime(value),
+                                formatDateTime(value)
+                            ];
                         })
                 });
             },

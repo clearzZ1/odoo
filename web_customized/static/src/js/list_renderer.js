@@ -1,10 +1,10 @@
 /** @odoo-module **/
 
-import { ListRenderer } from "@web/views/list/list_renderer";
-import { patch } from "@web/core/utils/patch";
-import { getActiveHotkey } from "@web/core/hotkeys/hotkey_service";
-import { _t } from "@web/core/l10n/translation";
-import { DateTimeRange } from "./datetime_range"
+import {ListRenderer} from "@web/views/list/list_renderer";
+import {patch} from "@web/core/utils/patch";
+import {getActiveHotkey} from "@web/core/hotkeys/hotkey_service";
+import {_t} from "@web/core/l10n/translation";
+import {DateTimeRange} from "./datetime_range"
 
 import {
     useState,
@@ -13,9 +13,9 @@ import {
 } from "@odoo/owl";
 
 patch(ListRenderer.prototype, {
-    searchFilters: {},
     setup() {
         super.setup(...arguments);
+        this.searchFilters = {};
         self = this;
         if (!this.isX2Many) {
             const _deactivateGroup = this.env.searchModel.deactivateGroup;
@@ -186,14 +186,14 @@ patch(ListRenderer.prototype, {
         this.searchFilters[fieldInfo.name] = {
             groupId: this.env.searchModel.nextGroupId,
             value: format,
-            title: format[0] + '~' + format[1]
+            title: format[0][1] + '~' + format[1][1]
         }
         this.env.searchModel.createNewFilters([{
-            description: `${fieldInfo.string}:${format[0]}~${format[1]}`,
-            domain: [[fieldInfo.name, '>=', format[0]], [fieldInfo.name, '<=', format[1]]],
+            description: `${fieldInfo.string}:${format[0][1]}~${format[1][1]}`,
+            domain: [[fieldInfo.name, '>=', format[0][0]], [fieldInfo.name, '<=', format[1][0]]],
             field: fieldInfo.name,
             custom: true,
-            title: format[0] + '~' + format[1]
+            title: format[0][1] + '~' + format[1][1]
         }])
     },
 
